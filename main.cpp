@@ -14,8 +14,8 @@ int main(){
     double myDub = 7.75;
     double myDub2 = 6.25;
 
-    double myDub3 = 3.6875;
-    double myDub4 = 41234.2333;
+    double myDub3 = 3.5;
+    double myDub4 = -4.25;
     string myStr  = "50.425";
     Real myReal(myDub);
     Real myReal2(myDub2);
@@ -28,6 +28,11 @@ int main(){
 
     //myReal2 = myReal + myReal2;
     myReal3 = myReal - myReal2;
+    myOutStream << myReal3 << endl;
+    myReal5 = myReal3 + myReal4;
+    myOutStream << myReal5 << endl;
+    myReal5 = myReal4 + myReal3;
+    myOutStream << myReal5 << endl;
     myReal2++;
     ++myReal2;
     //myOutStream << myReal4 << endl;

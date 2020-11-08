@@ -36,17 +36,19 @@ Real::Real(const Real & R){
 //Should be alble to constuct a Real object given a 
 //string of a real number as the arg
 Real::Real(const string & S){
-
+    string str = S;
     bool pastDot = false;
     strFrac = "";
     strWhole = "";
 
-    if(S[0] == '-')
+    if(S[0] == '-') {
         neg = true;
+        str = S.substr(1, S.length() - 1);
+    }
     else
         neg = false;
 
-    for(char i : S){
+    for(char i : str){
         if(i == '.')
             pastDot = true;
         if(pastDot)
@@ -64,7 +66,10 @@ Real::Real(const string & S){
 
 
 Real::Real (long long W, long long D){
-    neg = false;
+    if(to_string(W)[0] == '-')
+        neg = true;
+    else
+        neg = false;
     strFrac = to_string(D);
     strWhole = to_string(W);
     whole = 0.0;
@@ -82,8 +87,10 @@ Real::Real (double D){
     strFrac = "";
     strWhole = "";
 
-    if(S[0] == '-')
+    if(S[0] == '-') {
         neg = true;
+        S = S.substr(1, S.length()-1);
+    }
     else
         neg = false;
 
@@ -121,7 +128,15 @@ Real & Real::operator = (const Real & R){
 
 
 ostream & operator << (ostream & outs, const Real & R) {
-    outs << R.strWhole << R.strFrac << endl;
+    if(R.neg){
+        cout << '-' << R.strWhole << R.strFrac << endl;
+        outs << '-' << R.strWhole << R.strFrac << endl;
+    }
+    else{
+        cout << R.strWhole << R.strFrac << endl;
+        outs << R.strWhole << R.strFrac << endl;
+    }
+
     return outs;
 }
 
@@ -232,12 +247,13 @@ Real Real::operator + (const Real & R) const{
         tempReal->neg = false;
         //We are essentially treating it like a pos - pos now
         *rResult = R - *tempReal;
-
+        return *rResult;
     }
     else{
         *tempReal = R;
         tempReal->neg = false;
         *rResult = *this - *tempReal;
+        return *rResult;
     }
     //Reverse result string
     reverse(result.begin(), result.end());
@@ -422,6 +438,8 @@ Real Real::operator - (const Real & R) const {
         smallerNumber = tempR;
     } else {
         biggerNumber = tempR;
+        //We know result will be negative if R was the bigger number
+        rResult->neg = true;
         smallerNumber = tempThis;
     }
 
