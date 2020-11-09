@@ -350,25 +350,11 @@ Real Real::operator += (const Real & R){
 
 
 Real Real::operator ++ (){
-
-    //Declare and set locals
-    string result;
-    string tempR (strWhole.length()-1, '0');
-    tempR = tempR + '1';
-    int carry = 0;
-
-    //Perform addition
-    for(int i = 0; i < strWhole.length(); i++){
-
-        int sum = ((strWhole[i] - '0') + (tempR[i] -'0')+carry);
-        result.push_back(sum%10 + '0');
-        carry = sum/10;
-    }
-
-    strWhole = result;
-
+    Real *tempReal = new Real(1.0);
+    *this = *this + *tempReal;
     return *this;
 }
+
 
 
 Real Real::operator ++ (int){

@@ -66,6 +66,9 @@ int main(){
     myOutStream << --newReal;
     myOutStream << newReal--;
     myOutStream << newReal;
+    myOutStream << ++newReal;
+    myOutStream << newReal++;
+    myOutStream << newReal;
 
     cout << "test" << endl;
 
