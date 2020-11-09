@@ -333,8 +333,6 @@ Real Real::operator += (const Real & R){
 
 
 Real Real::operator ++ (){
-    //Make a new Real() object to return once we have computed result
-    Real *rResult = new Real();
 
     //Declare and set locals
     string result;
@@ -351,9 +349,7 @@ Real Real::operator ++ (){
     }
 
     strWhole = result;
-    //rResult->strWhole = result;
 
-    //return *rResult;
     return *this;
 }
 
@@ -477,20 +473,7 @@ Real Real::operator - (const Real & R) const {
     rResult->strFrac = result.substr(pos);
 
     return *rResult;
-
-    /*
-// subtract remaining digits of larger number
-for (int i=n2; i<n1; i++)
-{
-    int sub = ((str1[i]-'0') - carry);
-    carry = 0;
-    str.push_back(sub + '0');
-}
-
-// reverse resultant string
-reverse(str.begin(), str.end());
- */
-//--------------------------------------
+    
 }
 
 /*
