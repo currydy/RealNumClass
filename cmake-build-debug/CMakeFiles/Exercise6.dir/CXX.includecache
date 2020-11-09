@@ -6,13 +6,23 @@
 
 #IncludeRegexTransform: 
 
+C:/Users/Dylan/Desktop/cs460/Exercise6/Real.cpp
+Real.h
 C:/Users/Dylan/Desktop/cs460/Exercise6/Real.h
 iostream
 -
+string
+-
+iomanip
+-
+algorithm
+-
+cmath
+-
+stdlib.h
+-
 
-C:/Users/Dylan/Desktop/cs460/Exercise6/main.cpp
-Real.h
 C:/Users/Dylan/Desktop/cs460/Exercise6/Real.h
-fstream
+iostream
 -
 

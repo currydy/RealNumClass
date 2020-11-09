@@ -163,8 +163,57 @@ bool Real::operator != (const Real & R) const{
 
 
 bool Real::operator > (const Real & R) const{
-    //NEED TO FIX
- return true;
+    int lenDiffWhole = strWhole.length() - R.strWhole.length();
+    int lenDiffFrac = strFrac.length() - R.strFrac.length();
+    string tempWhole = strWhole;
+    string tempWholeR = R.strWhole;
+    string tempFrac = strFrac;
+    string tempFracR = R.strFrac;
+    lenDiffWhole = abs(lenDiffWhole);
+    lenDiffFrac = abs(lenDiffFrac);
+    string wZeros(lenDiffWhole, '0');
+    string fZeros(lenDiffFrac, '0');
+
+    if((this->neg) && !(R.neg))
+        return false;
+    else if(!(this->neg) && (R.neg))
+        return true;
+
+    //Pad numbers to be the same length
+    //And find out which number is larger
+    if (strWhole.length() > R.strWhole.length()) {
+        tempWholeR = wZeros + tempWholeR;
+        return true;
+    }
+    else if (strWhole.length() < R.strWhole.length())
+        tempWhole = wZeros + tempWhole;
+    else{
+        //If they are the same length, then which whole component is larger?
+        for (int i = 0; i < tempWhole.length(); i++) {
+            if (tempWhole[i] < tempWholeR[i]) {
+                return false;
+            } else if (tempWhole[i] > tempWholeR[i]) {
+                return true;
+            }
+        }
+    }
+    if (strFrac.length() > R.strFrac.length()) {
+        tempFracR = tempFracR + fZeros;
+        return true;
+    } else if (strFrac.length() < R.strFrac.length())
+        tempFrac = tempFrac + fZeros;
+    else {
+
+        //If they are the same length, then which fraction component is larger?
+        for (int i = 0; i < tempFrac.length(); i++) {
+            if (tempFrac[i] < tempFracR[i]) {
+                return false;
+            } else if (tempFrac[i] > tempFracR[i]) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 /*
@@ -420,7 +469,7 @@ Real Real::operator - (const Real & R) const {
     else {
 
         //If they are the same length, then which fraction component is larger?
-        for (int i = 0; i < tempWhole.length(); i++) {
+        for (int i = 0; i < tempFrac.length(); i++) {
             if (tempFrac[i] < tempFracR[i]) {
                 thisFracLarger = false;
                 break;

@@ -18,12 +18,15 @@ int main(){
     double myDub4 = -4.25;
     double myDub6 = -4.25;
     string myStr  = "50.425";
+    string myStr2 = "50.421";
     Real myReal(myDub);
     Real myReal2(myDub2);
     Real myReal3(myDub3);
     Real myReal4(myDub4);
     Real myReal5(myStr);
     Real myReal6(myDub6);
+    Real myReal7(myStr2);
+    Real myReal8(myStr);
 
     if(myReal3 == myReal4)
         cout << "TRUE" << endl;
@@ -33,6 +36,7 @@ int main(){
     myOutStream << myReal3 << endl;
     myReal5 = myReal3 + myReal4;
     myOutStream << myReal5 << endl;
+    cout << "last myReal5 value" << endl;
     myReal5 = myReal4 + myReal3;
     myOutStream << myReal5 << endl;
     myReal2++;
@@ -69,6 +73,9 @@ int main(){
     myOutStream << ++newReal;
     myOutStream << newReal++;
     myOutStream << newReal;
+
+    if(myReal8 > myReal7)
+        cout << "GREATER THAN" << endl;
 
     cout << "test" << endl;
 
