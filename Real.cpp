@@ -334,7 +334,7 @@ Real Real::operator += (const Real & R){
     //Reverse result string
     reverse(result.begin(), result.end());
 
-    //Set rResult's Whole and Fraction portions using result
+    //Set "this" object's Whole and Fraction portions using result
     std::size_t pos = result.find('.');
     strWhole = result.substr(0, pos);
     strFrac = result.substr(pos);
@@ -498,7 +498,7 @@ Real Real::operator - (const Real & R) const {
     else{
         *tempReal = R;
         tempReal->neg = false;
-        *rResult = *this - *tempReal;
+        *rResult = *this + *tempReal;
         return *rResult;
     }
 

@@ -46,6 +46,9 @@ int main(){
     myOutStream << myReal3;
     //myOutStream << myReal4 << endl;
     myOutStream << myReal2;
+    myOutStream << myReal6;
+    myOutStream << myReal6 - myReal2;
+    myOutStream << myReal2 - myReal6;
 
     cout << "test" << endl;
 
