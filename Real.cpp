@@ -192,7 +192,7 @@ Real Real::operator + (const Real & R) const{
     //Make a new Real() object to return once we have computed result
     Real *rResult = new Real();
 
-    //Need to make a temp to avoid CONST issue during calls to -operator
+    //Need to make a temp to avoid CONST issue when wanting to change the sign and call -operator
     Real *tempReal = new Real();
 
     //Declare and set locals
@@ -242,6 +242,7 @@ Real Real::operator + (const Real & R) const{
         if (carry)
             result.push_back(carry + '0');
     }
+    //Using -operator in this case
     else if(neg && !R.neg) {
         *tempReal = *this;
         tempReal->neg = false;
@@ -249,6 +250,7 @@ Real Real::operator + (const Real & R) const{
         *rResult = R - *tempReal;
         return *rResult;
     }
+    //Using -operator in this case
     else{
         *tempReal = R;
         tempReal->neg = false;
@@ -302,19 +304,33 @@ Real Real::operator += (const Real & R){
     reverse(tempR.begin(), tempR.end());
 
     //Perform addition
-    for(int i = 0; i < tempThis.length(); i++){
-        if(tempThis[i] == '.'){
-            result.push_back('.');
-            continue;
+    if((!neg && !R.neg) || (neg && R.neg)) {
+        for (int i = 0; i < tempThis.length(); i++) {
+            if (tempThis[i] == '.') {
+                result.push_back('.');
+                continue;
+            }
+            int sum = ((tempThis[i] - '0') + (tempR[i] - '0') + carry);
+            result.push_back(sum % 10 + '0');
+            carry = sum / 10;
         }
-        int sum = ((tempThis[i] - '0') + (tempR[i] -'0')+carry);
-        result.push_back(sum%10 + '0');
-        carry = sum/10;
+        //Add carry digit to number if not zero
+        if (carry)
+            result.push_back(carry + '0');
     }
-    //Add carry digit to number if not zero
-    if(carry)
-        result.push_back(carry + '0');
-
+    //Using -operator in this case
+    else if(neg && !R.neg) {
+        this->neg = false;
+        //We are essentially treating it like a pos - pos now
+        *this = R - *this;
+        return *this;
+    }
+    //Using -operator in this case
+    else{
+        this->neg = false;
+        *this= *this - R;
+        return *this;
+    }
     //Reverse result string
     reverse(result.begin(), result.end());
 
@@ -364,6 +380,9 @@ Real Real::operator ++ (int){
 Real Real::operator - (const Real & R) const {
     //Make a new Real() object to return once we have computed result
     Real *rResult = new Real();
+
+    //Need to make a temp to avoid CONST issue when wanting to change the sign and call +operator
+    Real *tempReal = new Real();
 
     //Declare and set locals
     int carry = 0;
@@ -432,10 +451,14 @@ Real Real::operator - (const Real & R) const {
     if (thisWholeLarger || (*this == R) || ((tempWhole == tempWholeR) && (thisFracLarger))) {
         biggerNumber = tempThis;
         smallerNumber = tempR;
+        rResult->neg = this->neg;
     } else {
         biggerNumber = tempR;
-        //We know result will be negative if R was the bigger number
-        rResult->neg = true;
+        //If the right operand is bigger and the signs are the same for both operands, we preemtively change the result sign
+        if(this->neg && R.neg)
+            rResult->neg = false;
+        else if(!(this->neg) && !(R.neg))
+            rResult->neg = true;
         smallerNumber = tempThis;
     }
 
@@ -443,24 +466,40 @@ Real Real::operator - (const Real & R) const {
     reverse(biggerNumber.begin(), biggerNumber.end());
     reverse(smallerNumber.begin(), smallerNumber.end());
 
+    if((!neg && !R.neg) || (neg && R.neg)){
+        //Perform subtraction
+        for (int i = 0; i < biggerNumber.length(); i++) {
+            if (biggerNumber[i] == '.') {
+                result.push_back('.');
+                continue;
+            }
 
-    //Perform subtraction
-    for (int i = 0; i < biggerNumber.length(); i++) {
-        if (biggerNumber[i] == '.') {
-            result.push_back('.');
-            continue;
+            int sub = ((biggerNumber[i] - '0') - (smallerNumber[i] - '0') - carry);
+
+            //If the subtraction resulted in a negative, we need to add ten and set the carry
+            if (sub < 0) {
+                sub = sub + 10;
+                carry = 1;
+            } else
+                carry = 0;
+
+            result.push_back(sub + '0');
         }
-
-        int sub = ((biggerNumber[i] - '0') - (smallerNumber[i] - '0') - carry);
-
-        //If the subtraction resulted in a negative, we need to add ten and set the carry
-        if (sub < 0) {
-            sub = sub + 10;
-            carry = 1;
-        } else
-            carry = 0;
-
-        result.push_back(sub + '0');
+    }
+    //Using the +operator for this case
+    else if(neg && !R.neg) {
+        *tempReal = *this;
+        tempReal->neg = false;
+        *rResult = *tempReal + R;
+        rResult->neg = true;
+        return *rResult;
+    }
+    //Using the +operator for this case
+    else{
+        *tempReal = R;
+        tempReal->neg = false;
+        *rResult = *this - *tempReal;
+        return *rResult;
     }
 
     //Reverse result string
