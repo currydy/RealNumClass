@@ -348,6 +348,7 @@ Real Real::operator += (const Real & R){
 }
 
 
+
 Real Real::operator ++ (){
 
     //Declare and set locals
@@ -375,6 +376,7 @@ Real Real::operator ++ (int){
     operator++();
     return tmp;
 }
+
 
 
 Real Real::operator - (const Real & R) const {
@@ -516,6 +518,7 @@ Real Real::operator - (const Real & R) const {
 }
 
 
+
 Real Real::operator -= (const Real & R){
 
     //Need to make a temp to avoid CONST issue when wanting to change the sign and call +operator
@@ -641,7 +644,6 @@ Real Real::operator -= (const Real & R){
     //Reverse result string
     reverse(result.begin(), result.end());
 
-
     //Set rResult's Whole and Fraction portions using result
     std::size_t pos = result.find('.');
     strWhole = result.substr(0, pos);
@@ -655,17 +657,23 @@ Real Real::operator -= (const Real & R){
     return *this;
 }
 
-/*
-Real Real::operator -- (){
 
+
+
+Real Real::operator -- (){
+    Real *tempReal = new Real(1.0);
+    *this = *this - *tempReal;
+    return *this;
 }
 
 
 Real Real::operator -- (int){
-
+    Real tmp(*this);
+    operator--();
+    return tmp;
 }
 
-
+/*
 Real Real::operator * (const Real & R) const{
 
 }

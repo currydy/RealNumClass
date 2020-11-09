@@ -54,6 +54,18 @@ int main(){
     myOutStream << myReal6;
     myReal3 -= myReal6;
     myOutStream << myReal3;
+    --myReal3;
+    myOutStream << myReal3;
+
+    double newdub = .5;
+    Real newReal(newdub);
+    Real newerReal(1.0);
+    cout << "startNewReal" << endl;
+    newerReal = newReal - newerReal;
+    myOutStream << newerReal;
+    myOutStream << --newReal;
+    myOutStream << newReal--;
+    myOutStream << newReal;
 
     cout << "test" << endl;
 
