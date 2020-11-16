@@ -17,6 +17,8 @@ iomanip
 -
 algorithm
 -
+vector
+-
 cmath
 -
 stdlib.h

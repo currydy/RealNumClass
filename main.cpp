@@ -19,6 +19,8 @@ int main(){
     double myDub6 = -4.25;
     string myStr  = "50.425";
     string myStr2 = "50.421";
+    string myStr3 = "22.5";
+    string myStr4 = "23.5";
     Real myReal(myDub);
     Real myReal2(myDub2);
     Real myReal3(myDub3);
@@ -59,6 +61,11 @@ int main(){
     myReal3 -= myReal6;
     myOutStream << myReal3;
     --myReal3;
+    myOutStream << myReal3;
+
+    Real realestReal(myStr3);
+    Real realestReal2(myStr4);
+    myReal3 = realestReal * realestReal2;
     myOutStream << myReal3;
 
     double newdub = .5;

@@ -36,6 +36,7 @@ class Real
         //bool smallestString(string s1, string s2);
         string strFrac;
         string strWhole;
+        string tempFull;
         double dubResult;
         bool neg;
         int whole;

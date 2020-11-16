@@ -3,6 +3,7 @@
 #include <string>
 #include <iomanip>
 #include <algorithm>
+#include <vector>
 #include <cmath>
 #include <stdlib.h>
 
@@ -13,6 +14,7 @@ Real::Real(){
     neg = false;
     strFrac = "";
     strWhole = "";
+    tempFull = "";
     whole = 0.0;
     frac_component = 0.0;
     dubResult = 0.0;
@@ -26,6 +28,7 @@ Real::Real(const Real & R){
    neg = R.neg;
    strFrac = R.strFrac;
    strWhole = R.strWhole;
+   tempFull = R.tempFull;
    l_longWhole = R.l_longWhole;
    l_longFrac = R.l_longFrac;
    dubResult = R.dubResult;
@@ -56,6 +59,7 @@ Real::Real(const string & S){
         else
             strWhole += i;
     }
+    tempFull = "";
     whole = 0.0;
     frac_component = 0.0;
     dubResult = 0.0;
@@ -72,6 +76,7 @@ Real::Real (long long W, long long D){
         neg = false;
     strFrac = to_string(D);
     strWhole = to_string(W);
+    tempFull = "";
     whole = 0.0;
     frac_component = 0.0;
     dubResult = 0.0;
@@ -102,6 +107,7 @@ Real::Real (double D){
         else
             strWhole += i;
     }
+    tempFull = "";
     whole = 0.0;
     frac_component = 0.0;
     dubResult = 0.0;
@@ -117,6 +123,7 @@ Real & Real::operator = (const Real & R){
     whole = R.whole;
     strFrac = R.strFrac;
     strWhole = R.strWhole;
+    tempFull = R.tempFull;
     frac_component = R.frac_component;
     dubResult = R.dubResult;
     l_longFrac = R.l_longFrac;
@@ -179,8 +186,7 @@ bool Real::operator > (const Real & R) const{
     else if(!(this->neg) && (R.neg))
         return true;
 
-    //Pad numbers to be the same length
-    //And find out which number is larger
+    //Find out which whole number is larger
     if (strWhole.length() > R.strWhole.length()) {
         tempWholeR = wZeros + tempWholeR;
         return true;
@@ -197,6 +203,7 @@ bool Real::operator > (const Real & R) const{
             }
         }
     }
+    //Find our which Fractional number is larger
     if (strFrac.length() > R.strFrac.length()) {
         tempFracR = tempFracR + fZeros;
         return true;
@@ -708,14 +715,59 @@ Real Real::operator -- (int){
     return tmp;
 }
 
-/*
+
 Real Real::operator * (const Real & R) const{
 
+    //Need to make a temp to avoid CONST issue when wanting to change the sign and call +operator
+    Real *tempReal = new Real();
+
+    string A = strWhole + strFrac.substr(1);
+    string B = R.strWhole + R.strFrac.substr(1);
+
+    if (A=="0" || B=="0")
+        tempReal->strWhole = "0";
+
+    int aL = A.length(), bL = B.length();
+    vector<int> result(aL+bL, 0);
+    string res = "";
+
+    for (auto i=aL-1; i>=0; --i)
+    {
+        for (auto j=bL-1; j>=0; --j)
+        {
+            result[i+j+1] += (A[i] - '0')*(B[j] - '0');
+        }
+    }
+
+    for (auto k=aL+bL-1; k>0; --k){
+        if (result[k] >= 10)
+        {
+            result[k-1] += result[k]/10;
+            result[k] %= 10;
+        }
+    }
+
+    int cnt = 0;
+    for (auto l=0; l<result.size(); ++l){
+        if (result[l]==0 && l==cnt) //To omit the leading zeroes E.g. 00456723 will be 456723.
+            ++cnt;
+        else
+            res += result[l] + '0'; //I was doing "-0" it was throwing internal error!
+    }
+    int test = strFrac.length();
+    res.insert(res.length() - (R.strFrac.length()-1+strFrac.length()-1), ".");
+    tempReal->strWhole = res.substr(0, res.find('.'));
+    tempReal->strFrac = res.substr(res.find('.'));
+
+    return *tempReal;
 }
 
 
 Real Real::operator *= (const Real & R){
+    //Need to make a temp to avoid CONST issue when wanting to change the sign and call +operator
+    Real *tempReal = new Real();
 
+    return *tempReal;
 }
-*/
+
 
