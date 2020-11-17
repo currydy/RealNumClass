@@ -157,8 +157,12 @@ ostream & operator << (ostream & outs, const Real & R) {
 
 istream & operator >> (istream & ins, Real & R){
     ins >> R.tempFull;
-    R.strWhole = R.tempFull.substr(0, R.tempFull.find('.'));
-    R.strFrac = R.tempFull.substr(R.tempFull.find('.'));
+    if(R.tempFull.find('.') == string::npos)
+        R.strWhole = R.tempFull;
+    else{
+        R.strWhole = R.tempFull.substr(0, R.tempFull.find('.'));
+        R.strFrac = R.tempFull.substr(R.tempFull.find('.'));
+    }
     return ins;
 }
 
@@ -744,8 +748,8 @@ Real Real::operator * (const Real & R) const{
     //Need to make a temp to avoid CONST issue when wanting to change the sign and call +operator
     Real *tempReal = new Real();
 
-    string A = strWhole + strFrac.substr(1);
-    string B = R.strWhole + R.strFrac.substr(1);
+    string A = strFrac.empty() ? strWhole : strWhole + strFrac.substr(1);
+    string B = R.strFrac.empty() ? R.strWhole : R.strWhole + R.strFrac.substr(1);
 
     if (A=="0" || B=="0")
         tempReal->strWhole = "0";
@@ -791,8 +795,9 @@ Real Real::operator *= (const Real & R){
     //Need to make a temp to avoid CONST issue when wanting to change the sign and call +operator
     Real *tempReal = new Real();
 
-    string A = strWhole + strFrac.substr(1);
-    string B = R.strWhole + R.strFrac.substr(1);
+    string A = strFrac.empty() ? strWhole : strWhole + strFrac.substr(1);
+    string B = R.strFrac.empty() ? R.strWhole : R.strWhole + R.strFrac.substr(1);
+
 
     if (A=="0" || B=="0")
         tempReal->strWhole = "0";

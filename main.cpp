@@ -8,8 +8,13 @@
 int main(){
 
     ofstream myOutStream;
-    myOutStream.open("myfile.txt");
+    ifstream myInStream;
 
+    myOutStream.open("myfile.txt");
+    myInStream.open("testInput.txt");
+
+    if(!myInStream.is_open())
+        cout << "PROBLEM OPENING INPUT FILE" << endl;
     long long myLong = 12345;
     double myDub = 7.75;
     double myDub2 = 6.25;
@@ -85,6 +90,13 @@ int main(){
         cout << "GREATER THAN" << endl;
 
     cout << "test" << endl;
+
+    Real inputReal;
+    Real inputReal2(2);
+    myInStream >> inputReal;
+    myOutStream << inputReal;
+    Real lastReal = inputReal *= inputReal2;
+    myOutStream << lastReal;
 
     return 0;
 }
