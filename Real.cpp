@@ -9,7 +9,7 @@
 
 using namespace std;
 
-
+/* Default Constructor */
 Real::Real(){
     neg = false;
     strFrac = "";
@@ -25,6 +25,7 @@ Real::Real(){
 
 
 
+/* Copy Constructor */
 Real::Real(const Real & R){
    neg = R.neg;
    strFrac = R.strFrac;
@@ -39,8 +40,7 @@ Real::Real(const Real & R){
 
 
 
-//Should be alble to constuct a Real object given a 
-//string of a real number as the arg
+/* Additional Constructor (string) */
 Real::Real(const string & S){
     string str = S;
     bool pastDot = false;
@@ -73,6 +73,7 @@ Real::Real(const string & S){
 
 
 
+/* Additional Constructor  (long long Whole and Fraction) */
 Real::Real (long long W, long long D){
     if(to_string(W)[0] == '-')
         neg = true;
@@ -90,6 +91,7 @@ Real::Real (long long W, long long D){
 
 
 
+/* Additional Constructor (double) */
 Real::Real (double D){
 
     string S = to_string(D);
@@ -122,6 +124,7 @@ Real::Real (double D){
 
 
 
+/* Overloaded = operator */
 Real & Real::operator = (const Real & R){
     if(this == &R)
         return *this;
@@ -140,6 +143,7 @@ Real & Real::operator = (const Real & R){
 
 
 
+/* Overloaded << operator */
 ostream & operator << (ostream & outs, const Real & R) {
     if(R.neg){
         cout << '-' << R.strWhole << R.strFrac << endl;
@@ -155,6 +159,7 @@ ostream & operator << (ostream & outs, const Real & R) {
 
 
 
+/* Overloaded >> operator */
 istream & operator >> (istream & ins, Real & R){
     ins >> R.tempFull;
     if(R.tempFull.find('.') == string::npos)
@@ -168,6 +173,7 @@ istream & operator >> (istream & ins, Real & R){
 
 
 
+/* Overloaded == operator */
 bool Real::operator == (const Real & R) const{
     //Compare all members
     if((neg == R.neg) && (strFrac == R.strFrac) && (strWhole == R.strWhole) && (whole == R.whole) && (dubResult == R.dubResult) && (frac_component == R.frac_component))
@@ -177,6 +183,7 @@ bool Real::operator == (const Real & R) const{
 
 
 
+/* Overloaded != operator */
 bool Real::operator != (const Real & R) const{
     //Compare all members
     if((neg == R.neg) && (strFrac == R.strFrac) && (strWhole == R.strWhole) && (whole == R.whole) && (dubResult == R.dubResult) && (frac_component == R.frac_component))
@@ -186,6 +193,7 @@ bool Real::operator != (const Real & R) const{
 
 
 
+/* Overloaded > operator */
 bool Real::operator > (const Real & R) const{
     int lenDiffWhole = strWhole.length() - R.strWhole.length();
     int lenDiffFrac = strFrac.length() - R.strFrac.length();
@@ -246,6 +254,7 @@ bool Real::operator > (const Real & R) const{
 
 
 
+/* Overloaded +>=operator */
 bool Real::operator >= (const Real & R) const{
     if((*this > R) || (*this == R))
         return true;
@@ -253,6 +262,8 @@ bool Real::operator >= (const Real & R) const{
 }
 
 
+
+/* Overloaded < operator */
 bool Real::operator < (const Real & R) const{
     if((*this > R) || (*this == R))
         return false;
@@ -260,6 +271,8 @@ bool Real::operator < (const Real & R) const{
 }
 
 
+
+/* Overloaded <= operator */
 bool Real::operator <= (const Real & R) const{
     if(*this > R)
         return false;
@@ -268,6 +281,7 @@ bool Real::operator <= (const Real & R) const{
 
 
 
+/* Overloaded + operator */
 Real Real::operator + (const Real & R) const{
 
     //Make a new Real() object to return once we have computed result
@@ -351,6 +365,7 @@ Real Real::operator + (const Real & R) const{
 
 
 
+/* Overloaded += operator */
 Real Real::operator += (const Real & R){
 
     //Declare and set locals
@@ -431,6 +446,7 @@ Real Real::operator += (const Real & R){
 
 
 
+/* Overloaded ++ operator (pre) */
 Real Real::operator ++ (){
     Real *tempReal = new Real(1.0);
     *this = *this + *tempReal;
@@ -439,6 +455,7 @@ Real Real::operator ++ (){
 
 
 
+/* Overloaded ++ operator (post) */
 Real Real::operator ++ (int){
     Real tmp(*this);
     operator++();
@@ -447,6 +464,7 @@ Real Real::operator ++ (int){
 
 
 
+/* Overloaded - operator */
 Real Real::operator - (const Real & R) const {
     //Make a new Real() object to return once we have computed result
     Real *rResult = new Real();
@@ -587,6 +605,7 @@ Real Real::operator - (const Real & R) const {
 
 
 
+/* Overloaded -= operator */
 Real Real::operator -= (const Real & R){
 
     //Need to make a temp to avoid CONST issue when wanting to change the sign and call +operator
@@ -726,7 +745,7 @@ Real Real::operator -= (const Real & R){
 }
 
 
-
+/* Overloaded -- operator (pre) */
 Real Real::operator -- (){
     Real *tempReal = new Real(1.0);
     *this = *this - *tempReal;
@@ -734,7 +753,7 @@ Real Real::operator -- (){
 }
 
 
-
+/* Overloaded -- operator (post) */
 Real Real::operator -- (int){
     Real tmp(*this);
     operator--();
@@ -743,30 +762,32 @@ Real Real::operator -- (int){
 
 
 
+/* Overloaded * operator */
 Real Real::operator * (const Real & R) const{
 
     //Need to make a temp to avoid CONST issue when wanting to change the sign and call +operator
     Real *tempReal = new Real();
 
-    string A = strFrac.empty() ? strWhole : strWhole + strFrac.substr(1);
-    string B = R.strFrac.empty() ? R.strWhole : R.strWhole + R.strFrac.substr(1);
+    string str1 = strFrac.empty() ? strWhole : strWhole + strFrac.substr(1);
+    string str2 = R.strFrac.empty() ? R.strWhole : R.strWhole + R.strFrac.substr(1);
 
-    if (A=="0" || B=="0")
+    if (str1=="0" || str2=="0")
         tempReal->strWhole = "0";
 
-    int aL = A.length(), bL = B.length();
-    vector<int> result(aL+bL, 0);
-    string res = "";
+    int len1 = str1.length();
+    int len2  = str2.length();
+    vector<int> result(len1+len2, 0);
+    string res;
 
-    for (auto i=aL-1; i>=0; --i)
+    for (int i = len1 - 1; i >= 0; --i)
     {
-        for (auto j=bL-1; j>=0; --j)
+        for (int j = len2 - 1; j >= 0; --j)
         {
-            result[i+j+1] += (A[i] - '0')*(B[j] - '0');
+            result[i+j+1] += (str1[i] - '0')*(str2[j] - '0');
         }
     }
 
-    for (auto k=aL+bL-1; k>0; --k){
+    for (int k = len1 + len2 - 1; k > 0; --k){
         if (result[k] >= 10)
         {
             result[k-1] += result[k]/10;
@@ -774,12 +795,12 @@ Real Real::operator * (const Real & R) const{
         }
     }
 
-    int cnt = 0;
-    for (auto l=0; l<result.size(); ++l){
-        if (result[l]==0 && l==cnt) //To omit the leading zeroes E.g. 00456723 will be 456723.
-            ++cnt;
+    int count = 0;
+    for (int l=0; l<result.size(); ++l){
+        if (result[l]==0 && l==count)
+            ++count;
         else
-            res += result[l] + '0'; //I was doing "-0" it was throwing internal error!
+            res += result[l] + '0';
     }
     int test = strFrac.length();
     res.insert(res.length() - (R.strFrac.length()-1+strFrac.length()-1), ".");
@@ -791,30 +812,31 @@ Real Real::operator * (const Real & R) const{
 
 
 
+/* Overloaded *= operator */
 Real Real::operator *= (const Real & R){
     //Need to make a temp to avoid CONST issue when wanting to change the sign and call +operator
     //Real *tempReal = new Real();
 
-    string A = strFrac.empty() ? strWhole : strWhole + strFrac.substr(1);
-    string B = R.strFrac.empty() ? R.strWhole : R.strWhole + R.strFrac.substr(1);
+    string str1 = strFrac.empty() ? strWhole : strWhole + strFrac.substr(1);
+    string str2 = R.strFrac.empty() ? R.strWhole : R.strWhole + R.strFrac.substr(1);
 
-
-    if (A=="0" || B=="0")
+    if (str1=="0" || str2=="0")
         strWhole = "0";
 
-    int aL = A.length(), bL = B.length();
-    vector<int> result(aL+bL, 0);
-    string res = "";
+    int len1 = str1.length();
+    int len2  = str2.length();
+    vector<int> result(len1+len2, 0);
+    string res;
 
-    for (auto i=aL-1; i>=0; --i)
+    for (int i = len1 - 1; i >= 0; --i)
     {
-        for (auto j=bL-1; j>=0; --j)
+        for (int j = len2 - 1; j >= 0; --j)
         {
-            result[i+j+1] += (A[i] - '0')*(B[j] - '0');
+            result[i+j+1] += (str1[i] - '0')*(str2[j] - '0');
         }
     }
 
-    for (auto k=aL+bL-1; k>0; --k){
+    for (int k = len1 + len2 - 1; k > 0; --k){
         if (result[k] >= 10)
         {
             result[k-1] += result[k]/10;
@@ -822,12 +844,12 @@ Real Real::operator *= (const Real & R){
         }
     }
 
-    int cnt = 0;
-    for (auto l=0; l<result.size(); ++l){
-        if (result[l]==0 && l==cnt) //To omit the leading zeroes E.g. 00456723 will be 456723.
-            ++cnt;
+    int count = 0;
+    for (int l=0; l<result.size(); ++l){
+        if (result[l]==0 && l==count)
+            ++count;
         else
-            res += result[l] + '0'; //I was doing "-0" it was throwing internal error!
+            res += result[l] + '0';
     }
     int test = strFrac.length();
     res.insert(res.length() - (R.strFrac.length()-1+strFrac.length()-1), ".");
