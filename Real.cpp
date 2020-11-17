@@ -24,6 +24,7 @@ Real::Real(){
 }
 
 
+
 Real::Real(const Real & R){
    neg = R.neg;
    strFrac = R.strFrac;
@@ -35,6 +36,8 @@ Real::Real(const Real & R){
    whole = R.whole;
    frac_component = R.frac_component;
 }
+
+
 
 //Should be alble to constuct a Real object given a 
 //string of a real number as the arg
@@ -69,6 +72,7 @@ Real::Real(const string & S){
 }
 
 
+
 Real::Real (long long W, long long D){
     if(to_string(W)[0] == '-')
         neg = true;
@@ -83,6 +87,7 @@ Real::Real (long long W, long long D){
     l_longWhole = 0;
     l_longFrac = 0;
 }
+
 
 
 Real::Real (double D){
@@ -114,6 +119,7 @@ Real::Real (double D){
     l_longWhole = 0;
     l_longFrac = 0;
 }
+
 
 
 Real & Real::operator = (const Real & R){
@@ -148,11 +154,15 @@ ostream & operator << (ostream & outs, const Real & R) {
 }
 
 
-/*
-istream & operator >> (istream & ins, Real & R){
 
+istream & operator >> (istream & ins, Real & R){
+    ins >> R.tempFull;
+    R.strWhole = R.tempFull.substr(0, R.tempFull.find('.'));
+    R.strFrac = R.tempFull.substr(R.tempFull.find('.'));
+    return ins;
 }
-*/
+
+
 
 bool Real::operator == (const Real & R) const{
     //Compare all members
@@ -161,12 +171,15 @@ bool Real::operator == (const Real & R) const{
     return false;
 }
 
+
+
 bool Real::operator != (const Real & R) const{
     //Compare all members
     if((neg == R.neg) && (strFrac == R.strFrac) && (strWhole == R.strWhole) && (whole == R.whole) && (dubResult == R.dubResult) && (frac_component == R.frac_component))
         return false;
     return true;
 }
+
 
 
 bool Real::operator > (const Real & R) const{
@@ -185,6 +198,10 @@ bool Real::operator > (const Real & R) const{
         return false;
     else if(!(this->neg) && (R.neg))
         return true;
+
+    //If they are the same then return false
+    if(*this == R)
+        return false;
 
     //Find out which whole number is larger
     if (strWhole.length() > R.strWhole.length()) {
@@ -223,23 +240,27 @@ bool Real::operator > (const Real & R) const{
     return false;
 }
 
-/*
-bool Real::operator >= (const Real & R) const{
 
+
+bool Real::operator >= (const Real & R) const{
+    if((*this > R) || (*this == R))
+        return true;
+    return false;
 }
 
 
 bool Real::operator < (const Real & R) const{
-
+    if((*this > R) || (*this == R))
+        return false;
+    return true;
 }
 
 
 bool Real::operator <= (const Real & R) const{
-
+    if(*this > R)
+        return false;
+    return true;
 }
-*/
-
-
 
 
 
@@ -323,6 +344,7 @@ Real Real::operator + (const Real & R) const{
 
     return *rResult;
 }
+
 
 
 Real Real::operator += (const Real & R){
@@ -701,7 +723,6 @@ Real Real::operator -= (const Real & R){
 
 
 
-
 Real Real::operator -- (){
     Real *tempReal = new Real(1.0);
     *this = *this - *tempReal;
@@ -709,11 +730,13 @@ Real Real::operator -- (){
 }
 
 
+
 Real Real::operator -- (int){
     Real tmp(*this);
     operator--();
     return tmp;
 }
+
 
 
 Real Real::operator * (const Real & R) const{
@@ -763,9 +786,48 @@ Real Real::operator * (const Real & R) const{
 }
 
 
+
 Real Real::operator *= (const Real & R){
     //Need to make a temp to avoid CONST issue when wanting to change the sign and call +operator
     Real *tempReal = new Real();
+
+    string A = strWhole + strFrac.substr(1);
+    string B = R.strWhole + R.strFrac.substr(1);
+
+    if (A=="0" || B=="0")
+        tempReal->strWhole = "0";
+
+    int aL = A.length(), bL = B.length();
+    vector<int> result(aL+bL, 0);
+    string res = "";
+
+    for (auto i=aL-1; i>=0; --i)
+    {
+        for (auto j=bL-1; j>=0; --j)
+        {
+            result[i+j+1] += (A[i] - '0')*(B[j] - '0');
+        }
+    }
+
+    for (auto k=aL+bL-1; k>0; --k){
+        if (result[k] >= 10)
+        {
+            result[k-1] += result[k]/10;
+            result[k] %= 10;
+        }
+    }
+
+    int cnt = 0;
+    for (auto l=0; l<result.size(); ++l){
+        if (result[l]==0 && l==cnt) //To omit the leading zeroes E.g. 00456723 will be 456723.
+            ++cnt;
+        else
+            res += result[l] + '0'; //I was doing "-0" it was throwing internal error!
+    }
+    int test = strFrac.length();
+    res.insert(res.length() - (R.strFrac.length()-1+strFrac.length()-1), ".");
+    tempReal->strWhole = res.substr(0, res.find('.'));
+    tempReal->strFrac = res.substr(res.find('.'));
 
     return *tempReal;
 }
