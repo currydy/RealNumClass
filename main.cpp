@@ -24,7 +24,7 @@ int main(){
     double myDub6 = -4.25;
     string myStr  = "50.425";
     string myStr2 = "50.421";
-    string myStr3 = "22.5";
+    string myStr3 = "22.534";
     string myStr4 = "23.5";
     Real myReal(myDub);
     Real myReal2(myDub2);
@@ -68,6 +68,7 @@ int main(){
     --myReal3;
     myOutStream << myReal3;
 
+    cout << "REALESTREAL TEST" << endl;
     Real realestReal(myStr3);
     Real realestReal2(myStr4);
     myReal3 = realestReal * realestReal2;
@@ -95,6 +96,9 @@ int main(){
     Real inputReal2(2);
     myInStream >> inputReal;
     myOutStream << inputReal;
+    realestReal *= realestReal2;
+    cout << "REALEST REAL *= TEST" << endl;
+    myOutStream << realestReal;
     Real lastReal = inputReal *= inputReal2;
     myOutStream << lastReal;
 

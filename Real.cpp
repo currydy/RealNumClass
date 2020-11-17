@@ -793,14 +793,14 @@ Real Real::operator * (const Real & R) const{
 
 Real Real::operator *= (const Real & R){
     //Need to make a temp to avoid CONST issue when wanting to change the sign and call +operator
-    Real *tempReal = new Real();
+    //Real *tempReal = new Real();
 
     string A = strFrac.empty() ? strWhole : strWhole + strFrac.substr(1);
     string B = R.strFrac.empty() ? R.strWhole : R.strWhole + R.strFrac.substr(1);
 
 
     if (A=="0" || B=="0")
-        tempReal->strWhole = "0";
+        strWhole = "0";
 
     int aL = A.length(), bL = B.length();
     vector<int> result(aL+bL, 0);
@@ -831,10 +831,10 @@ Real Real::operator *= (const Real & R){
     }
     int test = strFrac.length();
     res.insert(res.length() - (R.strFrac.length()-1+strFrac.length()-1), ".");
-    tempReal->strWhole = res.substr(0, res.find('.'));
-    tempReal->strFrac = res.substr(res.find('.'));
+    strWhole = res.substr(0, res.find('.'));
+    strFrac = res.substr(res.find('.'));
 
-    return *tempReal;
+    return *this;
 }
 
 
