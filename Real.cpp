@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <vector>
 #include <cmath>
+#include <memory>
 #include <stdlib.h>
 
 using namespace std;
@@ -255,10 +256,10 @@ bool Real::operator <= (const Real & R) const{
 Real Real::operator + (const Real & R) const{
 
     //Make a new Real() object to return once we have computed result
-    Real *rResult = new Real();
+   unique_ptr<Real> rResult(new Real());
 
     //Need to make a temp to be able to change the sign and call -operator
-    Real *tempReal = new Real();
+    unique_ptr<Real> tempReal(new Real());
 
     //Declare and set locals
     int carry = 0;
@@ -414,7 +415,7 @@ Real Real::operator += (const Real & R){
 
 /* Overloaded ++ operator (pre) */
 Real Real::operator ++ (){
-    Real *tempReal = new Real(1.0);
+    unique_ptr<Real> tempReal(new Real(1.0));
     *this = *this + *tempReal;
     return *this;
 }
@@ -433,10 +434,10 @@ Real Real::operator ++ (int){
 /* Overloaded - operator */
 Real Real::operator - (const Real & R) const {
     //Make a new Real() object to return once we have computed result
-    Real *rResult = new Real();
+    unique_ptr<Real> rResult(new Real());
 
-    //Need to make a temp if we want to change the sign and call +operator
-    Real *tempReal = new Real();
+    //Need to make a temp to be able to change the sign and call -operator
+    unique_ptr<Real> tempReal(new Real());
 
     //Declare and set locals
     int carry = 0;
@@ -574,8 +575,8 @@ Real Real::operator - (const Real & R) const {
 /* Overloaded -= operator */
 Real Real::operator -= (const Real & R){
 
-    //Need to make a temp to be able to change the sign and call +operator
-    Real *tempReal = new Real();
+    //Need to make a temp to be able to change the sign and call -operator
+    unique_ptr<Real> tempReal(new Real());
 
     //Declare and set locals
     int carry = 0;
@@ -710,7 +711,7 @@ Real Real::operator -= (const Real & R){
 
 /* Overloaded -- operator (pre) */
 Real Real::operator -- (){
-    Real *tempReal = new Real(1.0);
+    unique_ptr<Real> tempReal(new Real(1.0));
     *this = *this - *tempReal;
     return *this;
 }
@@ -729,8 +730,8 @@ Real Real::operator -- (int){
 /* Overloaded * operator */
 Real Real::operator * (const Real & R) const{
 
-    //Need to make a temp
-    Real *tempReal = new Real();
+    //Need to make a temp 
+    unique_ptr<Real> tempReal(new Real());
 
     //If there is no fractional component then the string will contain only the whole
     //Otherwise we will remove the decimal point from the fractional component and concatenate

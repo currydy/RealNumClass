@@ -72,7 +72,10 @@ int main(){
     Real realestReal(myStr3);
     Real realestReal2(myStr4);
     myReal3 = realestReal * realestReal2;
+    Real *realPtr = &myReal3;
     myOutStream << myReal3;
+    myOutStream << *realPtr;
+    cout << "IS ABOVE OK?" << endl;
 
     double newdub = .5;
     Real newReal(newdub);
@@ -99,8 +102,10 @@ int main(){
     realestReal *= realestReal2;
     cout << "REALEST REAL *= TEST" << endl;
     myOutStream << realestReal;
-    Real lastReal = inputReal *= inputReal2;
+    Real lastReal = (inputReal *= inputReal2);
     myOutStream << lastReal;
-
+    lastReal = inputReal;
+    myOutStream << lastReal;
+    Real *ptrReal = &lastReal;
     return 0;
 }
