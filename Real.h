@@ -28,21 +28,11 @@ class Real
         Real operator -- (int);
         Real operator * (const Real & R) const;
         Real operator *= (const Real & R);
-        Real operator / (const Real & R) const; // Extra Credit
-        Real operator /= (const Real & R); // Extra Credit
     
     private:
-
-        //bool smallestString(string s1, string s2);
         string strFrac;
         string strWhole;
         string tempFull;
-        double dubResult;
         bool neg;
-        int whole;
-        long long l_longWhole;
-        long long l_longFrac;
-        //int carry;
-        double frac_component;
       
 };

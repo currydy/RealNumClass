@@ -15,11 +15,6 @@ Real::Real(){
     strFrac = "";
     strWhole = "";
     tempFull = "";
-    whole = 0.0;
-    frac_component = 0.0;
-    dubResult = 0.0;
-    l_longWhole = 0;
-    l_longFrac = 0;
 
 }
 
@@ -31,11 +26,6 @@ Real::Real(const Real & R){
    strFrac = R.strFrac;
    strWhole = R.strWhole;
    tempFull = R.tempFull;
-   l_longWhole = R.l_longWhole;
-   l_longFrac = R.l_longFrac;
-   dubResult = R.dubResult;
-   whole = R.whole;
-   frac_component = R.frac_component;
 }
 
 
@@ -63,11 +53,6 @@ Real::Real(const string & S){
             strWhole += i;
     }
     tempFull = "";
-    whole = 0.0;
-    frac_component = 0.0;
-    dubResult = 0.0;
-    l_longWhole = 0;
-    l_longFrac = 0;
 
 }
 
@@ -82,11 +67,6 @@ Real::Real (long long W, long long D){
     strFrac = to_string(D);
     strWhole = to_string(W);
     tempFull = "";
-    whole = 0.0;
-    frac_component = 0.0;
-    dubResult = 0.0;
-    l_longWhole = 0;
-    l_longFrac = 0;
 }
 
 
@@ -115,11 +95,6 @@ Real::Real (double D){
             strWhole += i;
     }
     tempFull = "";
-    whole = 0.0;
-    frac_component = 0.0;
-    dubResult = 0.0;
-    l_longWhole = 0;
-    l_longFrac = 0;
 }
 
 
@@ -129,14 +104,9 @@ Real & Real::operator = (const Real & R){
     if(this == &R)
         return *this;
     neg = R.neg;
-    whole = R.whole;
     strFrac = R.strFrac;
     strWhole = R.strWhole;
     tempFull = R.tempFull;
-    frac_component = R.frac_component;
-    dubResult = R.dubResult;
-    l_longFrac = R.l_longFrac;
-    l_longFrac = R.l_longWhole;
 
     return *this;
 }
@@ -176,7 +146,7 @@ istream & operator >> (istream & ins, Real & R){
 /* Overloaded == operator */
 bool Real::operator == (const Real & R) const{
     //Compare all members
-    if((neg == R.neg) && (strFrac == R.strFrac) && (strWhole == R.strWhole) && (whole == R.whole) && (dubResult == R.dubResult) && (frac_component == R.frac_component))
+    if((neg == R.neg) && (strFrac == R.strFrac) && (strWhole == R.strWhole))
         return true;
     return false;
 }
@@ -186,7 +156,7 @@ bool Real::operator == (const Real & R) const{
 /* Overloaded != operator */
 bool Real::operator != (const Real & R) const{
     //Compare all members
-    if((neg == R.neg) && (strFrac == R.strFrac) && (strWhole == R.strWhole) && (whole == R.whole) && (dubResult == R.dubResult) && (frac_component == R.frac_component))
+    if((neg == R.neg) && (strFrac == R.strFrac) && (strWhole == R.strWhole))
         return false;
     return true;
 }
@@ -287,7 +257,7 @@ Real Real::operator + (const Real & R) const{
     //Make a new Real() object to return once we have computed result
     Real *rResult = new Real();
 
-    //Need to make a temp to avoid CONST issue when wanting to change the sign and call -operator
+    //Need to make a temp to be able to change the sign and call -operator
     Real *tempReal = new Real();
 
     //Declare and set locals
@@ -436,10 +406,6 @@ Real Real::operator += (const Real & R){
     strWhole = result.substr(0, pos);
     strFrac = result.substr(pos);
     neg = R.neg;
-    frac_component = R.frac_component;
-    dubResult = R.dubResult;
-    l_longFrac = R.l_longFrac;
-    l_longFrac = R.l_longWhole;
 
     return *this;
 }
@@ -469,7 +435,7 @@ Real Real::operator - (const Real & R) const {
     //Make a new Real() object to return once we have computed result
     Real *rResult = new Real();
 
-    //Need to make a temp to avoid CONST issue when wanting to change the sign and call +operator
+    //Need to make a temp if we want to change the sign and call +operator
     Real *tempReal = new Real();
 
     //Declare and set locals
@@ -608,7 +574,7 @@ Real Real::operator - (const Real & R) const {
 /* Overloaded -= operator */
 Real Real::operator -= (const Real & R){
 
-    //Need to make a temp to avoid CONST issue when wanting to change the sign and call +operator
+    //Need to make a temp to be able to change the sign and call +operator
     Real *tempReal = new Real();
 
     //Declare and set locals
@@ -736,13 +702,10 @@ Real Real::operator -= (const Real & R){
     strWhole = result.substr(0, pos);
     strFrac = result.substr(pos);
     neg = R.neg;
-    frac_component = R.frac_component;
-    dubResult = R.dubResult;
-    l_longFrac = R.l_longFrac;
-    l_longFrac = R.l_longWhole;
 
     return *this;
 }
+
 
 
 /* Overloaded -- operator (pre) */
@@ -751,6 +714,7 @@ Real Real::operator -- (){
     *this = *this - *tempReal;
     return *this;
 }
+
 
 
 /* Overloaded -- operator (post) */
@@ -765,31 +729,36 @@ Real Real::operator -- (int){
 /* Overloaded * operator */
 Real Real::operator * (const Real & R) const{
 
-    //Need to make a temp to avoid CONST issue when wanting to change the sign and call +operator
+    //Need to make a temp
     Real *tempReal = new Real();
 
+    //If there is no fractional component then the string will contain only the whole
+    //Otherwise we will remove the decimal point from the fractional component and concatenate
     string str1 = strFrac.empty() ? strWhole : strWhole + strFrac.substr(1);
     string str2 = R.strFrac.empty() ? R.strWhole : R.strWhole + R.strFrac.substr(1);
 
-    if (str1=="0" || str2=="0")
+    //If either string is 0 then the result will be zero
+    if (str1=="0" || str2=="0"){
         tempReal->strWhole = "0";
+        tempReal->strFrac = "";
+        return *tempReal;
+    }
 
     int len1 = str1.length();
     int len2  = str2.length();
     vector<int> result(len1+len2, 0);
     string res;
 
-    for (int i = len1 - 1; i >= 0; --i)
-    {
-        for (int j = len2 - 1; j >= 0; --j)
-        {
+    //Move from right to left and multiply
+    for (int i = len1 - 1; i >= 0; --i){
+        for (int j = len2 - 1; j >= 0; --j){
             result[i+j+1] += (str1[i] - '0')*(str2[j] - '0');
         }
     }
 
+    //Considering the carry
     for (int k = len1 + len2 - 1; k > 0; --k){
-        if (result[k] >= 10)
-        {
+        if (result[k] >= 10){
             result[k-1] += result[k]/10;
             result[k] %= 10;
         }
@@ -802,7 +771,6 @@ Real Real::operator * (const Real & R) const{
         else
             res += result[l] + '0';
     }
-    int test = strFrac.length();
     res.insert(res.length() - (R.strFrac.length()-1+strFrac.length()-1), ".");
     tempReal->strWhole = res.substr(0, res.find('.'));
     tempReal->strFrac = res.substr(res.find('.'));
@@ -814,31 +782,34 @@ Real Real::operator * (const Real & R) const{
 
 /* Overloaded *= operator */
 Real Real::operator *= (const Real & R){
-    //Need to make a temp to avoid CONST issue when wanting to change the sign and call +operator
-    //Real *tempReal = new Real();
 
+    //If there is no fractional component then the string will contain only the whole
+    //Otherwise we will remove the decimal point from the fractional component and concatenate
     string str1 = strFrac.empty() ? strWhole : strWhole + strFrac.substr(1);
     string str2 = R.strFrac.empty() ? R.strWhole : R.strWhole + R.strFrac.substr(1);
 
-    if (str1=="0" || str2=="0")
+    //If either string is 0 then the result will be zero
+    if (str1=="0" || str2=="0"){
         strWhole = "0";
+        strFrac = "";
+        return *this;
+    }
 
     int len1 = str1.length();
     int len2  = str2.length();
     vector<int> result(len1+len2, 0);
     string res;
 
-    for (int i = len1 - 1; i >= 0; --i)
-    {
-        for (int j = len2 - 1; j >= 0; --j)
-        {
+    //Move from right to left and multiply
+    for (int i = len1 - 1; i >= 0; --i){
+        for (int j = len2 - 1; j >= 0; --j){
             result[i+j+1] += (str1[i] - '0')*(str2[j] - '0');
         }
     }
 
+    //Considering the carry
     for (int k = len1 + len2 - 1; k > 0; --k){
-        if (result[k] >= 10)
-        {
+        if (result[k] >= 10){
             result[k-1] += result[k]/10;
             result[k] %= 10;
         }
@@ -851,7 +822,6 @@ Real Real::operator *= (const Real & R){
         else
             res += result[l] + '0';
     }
-    int test = strFrac.length();
     res.insert(res.length() - (R.strFrac.length()-1+strFrac.length()-1), ".");
     strWhole = res.substr(0, res.find('.'));
     strFrac = res.substr(res.find('.'));
