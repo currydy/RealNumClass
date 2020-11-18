@@ -4,6 +4,8 @@
 
 #include "Real.h"
 #include <fstream>
+#include <vector>
+#include <algorithm>
 
 int main(){
 
@@ -107,5 +109,16 @@ int main(){
     lastReal = inputReal;
     myOutStream << lastReal;
     Real *ptrReal = &lastReal;
+
+    Real r;
+    vector<Real> rVect;
+    while( myInStream >> r){
+        rVect.push_back(r);
+    }
+
+    sort(rVect.begin(), rVect.end());
+    for(auto iter = rVect.begin(); iter != rVect.end(); ++iter){
+        myOutStream << *iter;
+    }
     return 0;
 }

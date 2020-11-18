@@ -189,37 +189,36 @@ bool Real::operator > (const Real & R) const{
     //Find out which whole number is larger
     if (strWhole.length() > R.strWhole.length()) {
         tempWholeR = wZeros + tempWholeR;
-        return true;
+        //return true;
     }
     else if (strWhole.length() < R.strWhole.length())
         tempWhole = wZeros + tempWhole;
-    else{
-        //If they are the same length, then which whole component is larger?
-        for (int i = 0; i < tempWhole.length(); i++) {
-            if (tempWhole[i] < tempWholeR[i]) {
-                return false;
-            } else if (tempWhole[i] > tempWholeR[i]) {
-                return true;
-            }
+
+    //If they are the same length, then which whole component is larger?
+    for (int i = 0; i < tempWhole.length(); i++) {
+        if (tempWhole[i] < tempWholeR[i]) {
+            return false;
+        } else if (tempWhole[i] > tempWholeR[i]) {
+            return true;
         }
     }
+
     //Find our which Fractional number is larger
     if (strFrac.length() > R.strFrac.length()) {
         tempFracR = tempFracR + fZeros;
-        return true;
+        //return true;
     } else if (strFrac.length() < R.strFrac.length())
         tempFrac = tempFrac + fZeros;
-    else {
 
-        //If they are the same length, then which fraction component is larger?
-        for (int i = 0; i < tempFrac.length(); i++) {
-            if (tempFrac[i] < tempFracR[i]) {
-                return false;
-            } else if (tempFrac[i] > tempFracR[i]) {
-                return true;
-            }
+    //since they are the same length, then which fraction component is larger?
+    for (int i = 0; i < tempFrac.length(); i++) {
+        if (tempFrac[i] < tempFracR[i]) {
+            return false;
+        } else if (tempFrac[i] > tempFracR[i]) {
+            return true;
         }
     }
+
     return false;
 }
 
@@ -730,7 +729,7 @@ Real Real::operator -- (int){
 /* Overloaded * operator */
 Real Real::operator * (const Real & R) const{
 
-    //Need to make a temp 
+    //Need to make a temp
     unique_ptr<Real> tempReal(new Real());
 
     //If there is no fractional component then the string will contain only the whole
