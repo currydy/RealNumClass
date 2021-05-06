@@ -1,3 +1,0 @@
-C:/Users/Dylan/Desktop/cs460/Exercise6/cmake-build-debug/CMakeFiles/Exercise6.dir
-C:/Users/Dylan/Desktop/cs460/Exercise6/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Dylan/Desktop/cs460/Exercise6/cmake-build-debug/CMakeFiles/rebuild_cache.dir
